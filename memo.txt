@@ -1,0 +1,82 @@
+收藏 collection
+评论 comment
+赞扬 praise
+活动 activity
+报名 register
+
+user表
+
+id
+name
+sex
+password
+phone 联系方式  phone_number
+department 部门
+location ???
+integral 积分
+birthday 生日
+face 头像
+likes 点赞数
+commentnum 评论数
+collnum 收藏数
+logintime 登录时间
+
+course表
+
+id
+title
+teacher
+people_number
+presentation  简介
+course_type_id 课程分类ID
+class_number  课时数
+status 状态
+col_number 收藏数
+
+
+course_chapter表  课程章节表
+
+id
+pid 所属的课程ID
+title
+video_id 视频ID
+sort 排序
+
+course_classes表 课程导航页
+
+id
+name
+
+course_comment表 课程评论
+
+id
+content
+time
+uid
+course_id
+pid
+ping_user_id 默认为0.首次评论
+is_jing
+is_top
+praise
+sort_id   类别id(rh_coure_classes表)
+
+
+course_comment_zan表
+
+id
+uid
+pingid
+time
+
+course_type表 废表
+
+user_course_coll表
+
+id
+uid
+kid  用户赞的课程ID
+
+
+
+课程数据库改了，前端API接口要改
