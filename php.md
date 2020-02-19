@@ -199,3 +199,114 @@ default:
 }
 ```
 
+##### tp5.1模块化开启的.htaccesst文件的配置
+
+```
+<IfModule mod_rewrite.c>
+  Options +FollowSymlinks -Multiviews
+  RewriteEngine On
+
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ index.php?s=$1 [QSA,PT,L]
+</IfModule>
+```
+
+##### tp5+ajax图片上传并回显
+
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+<form id="form" method="post" action="index/index/add">
+    <p>
+        <input id="file" type="file">
+        <input type="hidden" name="image_url" id="image_url" value="">
+    </p>
+
+    <p>
+        <img id="img" src="" width="200px" height="300px">
+    </p>
+
+    <p>
+        <input type="submit">
+    </p>
+
+</form>
+
+<script>
+
+    $('#file').change(function() {
+        var formData = new FormData();
+        formData.append('image', $('#file')[0].files[0]);
+        $.ajax({
+            url:'index/index/upload',
+            type:'POST',
+            data:formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                $('#img').attr('src',data['path']);
+                $('#image_url').attr('value',data['path']);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+    public function add(){
+        $param = Request::param();
+        Db::table('image')->insert($param);
+        $this->success('添加成功');
+
+    }
+
+
+
+    public function upload()
+    {
+        $file=request()->file('image');
+        if(!empty($file)){
+            $info = $file->move('uploads');
+            if($info){
+                $request= Request::instance();
+                $domain = $request->domain();
+                $path = $domain ."/uploads/". $info->getSaveName();
+                return ['status'=>1,'path'=>$path];
+            }else{
+                return ['status'=>0];
+            }
+        }
+    }
+
+```
+
+##### tp5 分页的高级用法
+
+```
+        $data = Db::name('guidance_book')
+            ->where($where)
+            ->paginate([
+            'page' => $page,
+            'list_rows' => 10,
+            'var_page' => 'page',
+            'path' => 'index',
+            'query' => request()->param()
+        ])
+```
+
